@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  site1:
+    image: nginx
+    environment:
+      VIRTUAL_HOST: site1.domain.com
+    volumes:
+      - ./site1:/usr/share/nginx/html
+    restart: always
+
+  site2:
+    image: nginx
+    environment:
+      VIRTUAL_HOST: site2.domain.com
+    volumes:
+      - ./site2:/usr/share/nginx/html
+    restart: always
