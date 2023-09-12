@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  site1:
+    image: nginx
+    environment:
+      VIRTUAL_HOST: site1.domain.com
+    volumes:
+      - ./site1:/usr/share/nginx/html
+    restart: always
+
+  site2:
+    image: nginx
+    environment:
+      VIRTUAL_HOST: site2.domain.com
+    volumes:
+      - ./site2:/usr/share/nginx/html
+    restart: always
+  
+  site3:
+    build:
+      context: ./site3  # Ruta al directorio del proyecto Laravel
+    environment:
+      VIRTUAL_HOST: site3.domain.com
+    # volumes:
+    #   - ./site1:/usr/share/nginx/html
+    ports:
+      - "8080:80"  # Puertos mapeados para acceder al proyecto Laravel
+    restart: always
