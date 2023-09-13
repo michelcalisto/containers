@@ -13,23 +13,44 @@ services:
       - mynetwork
     restart: always
 
-  web:
+  web-site1:
     image: nginx:latest
-    container_name: web
+    container_name: web-site1
     environment:
       VIRTUAL_HOST: site1.domain.com
     volumes:
-      - ./src:/var/www/html
-      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - ./src-site1:/var/www/html
+      - ./default-site1.conf:/etc/nginx/conf.d/default.conf
     networks:
       - mynetwork
     restart: always
 
-  php-fpm:
+  php-fpm-site1:
     image: php:8-fpm
-    container_name: php-fpm
+    container_name: php-fpm-site1
     volumes:
-      - ./src:/var/www/html
+      - ./src-site1:/var/www/html
+    networks:
+      - mynetwork
+    restart: always
+
+  web-site2:
+    image: nginx:latest
+    container_name: web-site2
+    environment:
+      VIRTUAL_HOST: site2.domain.com
+    volumes:
+      - ./src-site2:/var/www/html
+      - ./default-site2.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - mynetwork
+    restart: always
+
+  php-fpm-site2:
+    image: php:8-fpm
+    container_name: php-fpm-site2
+    volumes:
+      - ./src-site2:/var/www/html
     networks:
       - mynetwork
     restart: always
