@@ -1,0 +1,39 @@
+version: "3.3"
+
+# Servicios
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - mynetwork
+    restart: always
+
+  web:
+    image: nginx:latest
+    container_name: web
+    environment:
+      VIRTUAL_HOST: site1.domain.com
+    volumes:
+      - ./src:/var/www/html
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - mynetwork
+    restart: always
+
+  php-fpm:
+    image: php:8-fpm
+    container_name: php-fpm
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - mynetwork
+    restart: always
+
+networks:
+  mynetwork:
+    driver: bridge
