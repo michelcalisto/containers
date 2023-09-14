@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+    restart: always
+
+  letsencrypt-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt-companion
+    volumes:
+      - ./certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    volumes_from:
+      - nginx-proxy:rw
+    restart: always
+
+  web-site1:
+    image: nginx:latest
+    container_name: web-site1
+    environment:
+      VIRTUAL_HOST: site1.domain.com
+    volumes:
+      - ./src-site1:/var/www/html
+      - ./default-site1.conf:/etc/nginx/conf.d/default.conf
+    restart: always
+
+  php-fpm-site1:
+    image: php:8-fpm
+    container_name: php-fpm-site1
+    volumes:
+      - ./src-site1:/var/www/html
+    restart: always
+
+  web-site2:
+    image: nginx:latest
+    container_name: web-site2
+    environment:
+      VIRTUAL_HOST: site2.domain.com
+      LETSENCRYPT_HOST: site2.domain.com
+      LETSENCRYPT_EMAIL: name@domain.com
+    volumes:
+      - ./src-site2:/var/www/html
+      - ./default-site2.conf:/etc/nginx/conf.d/default.conf
+    restart: always
+
+  php-fpm-site2:
+    image: php:8-fpm
+    container_name: php-fpm-site2
+    volumes:
+      - ./src-site2:/var/www/html
+    restart: always
