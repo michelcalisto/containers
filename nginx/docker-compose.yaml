@@ -8,7 +8,7 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
 
-  site1:
+  site1-nginx:
     image: nginx
     environment:
       VIRTUAL_HOST: site1.domain.com
@@ -16,7 +16,7 @@ services:
       - ./site1:/usr/share/nginx/html
     restart: always
 
-  site2:
+  site2-nginx:
     image: nginx
     environment:
       VIRTUAL_HOST: site2.domain.com
