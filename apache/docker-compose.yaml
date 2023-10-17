@@ -1,9 +1,9 @@
 version: '3.9'
 
 services:
-  apache-site1:
+  site1-apache:
     image: httpd:2.4
-    container_name: apache-site1
+    container_name: site1-apache
     ports:
       - "8081:80"
     volumes:
@@ -11,9 +11,9 @@ services:
     environment:
       - VIRTUAL_HOST=site1.domain.com
 
-  apache-site2:
+  site2-apache:
     image: httpd:2.4
-    container_name: apache-site2
+    container_name: site2-apache
     ports:
       - "8082:80"
     volumes:
