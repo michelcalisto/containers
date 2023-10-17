@@ -20,8 +20,3 @@ services:
       - ./site2:/usr/local/apache2/htdocs
     environment:
       - VIRTUAL_HOST=site2.domain.com
-
-networks:
-  default:
-    external:
-      name: nginx-proxy-network
