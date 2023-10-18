@@ -28,46 +28,46 @@ services:
       - mynetwork
     restart: always
 
-  web-site1:
+  site1-nginx:
     image: nginx:latest
-    container_name: web-site1
+    container_name: site1-nginx
     environment:
       VIRTUAL_HOST: site1.domain.com
     volumes:
-      - ./src-site1:/var/www/html
+      - ./site1:/var/www/html
       - ./default-site1.conf:/etc/nginx/conf.d/default.conf
     networks:
       - mynetwork
     restart: always
 
-  php-fpm-site1:
+  site1-php-fpm:
     image: php:8-fpm
-    container_name: php-fpm-site1
+    container_name: site1-php-fpm
     volumes:
-      - ./src-site1:/var/www/html
+      - ./site1:/var/www/html
     networks:
       - mynetwork
     restart: always
 
-  web-site2:
+  site2-nginx:
     image: nginx:latest
-    container_name: web-site2
+    container_name: site2-nginx
     environment:
       VIRTUAL_HOST: site2.domain.com
       LETSENCRYPT_HOST: site2.domain.com
       LETSENCRYPT_EMAIL: name@domain.com
     volumes:
-      - ./src-site2:/var/www/html
+      - ./site2:/var/www/html
       - ./default-site2.conf:/etc/nginx/conf.d/default.conf
     networks:
       - mynetwork
     restart: always
 
-  php-fpm-site2:
+  site2-php-fpm:
     image: php:8-fpm
-    container_name: php-fpm-site2
+    container_name: site2-php-fpm
     volumes:
-      - ./src-site2:/var/www/html
+      - ./site2:/var/www/html
     networks:
       - mynetwork
     restart: always
